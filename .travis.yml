@@ -1,11 +1,7 @@
 language: android
 dist: trusty
-jdk:
-  - openjdk8
 android:
   components:
-    # The latest revision of Android SDK Tools
-     - tools
     # The SDK version used to compile your project
     - android-28
 script: ./gradlew connectedAndroidTest
