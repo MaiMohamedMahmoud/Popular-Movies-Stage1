@@ -1,5 +1,7 @@
 package com.marscode.pwn.aflamk;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -9,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.marscode.pwn.aflamk.Data.MovieListner;
 import com.marscode.pwn.aflamk.Models.Movies;
 import com.squareup.picasso.Picasso;
 
@@ -24,10 +27,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
     List<Movies> moviesList;
     Context context;
+    MovieListner movieListner;
 
-    MovieAdapter(List<Movies> moviesList, Context context) {
+    MovieAdapter(List<Movies> moviesList, Context context, MovieListner movieListner) {
         this.moviesList = moviesList;
         this.context = context;
+        this.movieListner = movieListner;
     }
 
     @NonNull
@@ -68,10 +73,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(context, MovieDetailsActivity.class);
-                    intent.putExtra("Movies_Id", moviesList.get(position).getId());
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(intent);
+                    movieListner.onClickItem( context,movie_image,moviesList.get(position));
                 }
             });
         }

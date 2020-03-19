@@ -6,4 +6,10 @@
     <string name="title_activity_movie_details">MovieDetailsActivity</string>
     <string name="action_settings">Settings</string>
     <string name="rate_txt">/10</string>
+    <string name="movie_details_video_description">Movie Video/Trailer</string>
+    <string name="movie_details_video_play">Play Button</string>
+    <string name="review_url"> %1$s </string>
+    <string name="float_description">Description</string>
+    <string name="shared_element_movieImage">movieImage</string>
+
 </resources>

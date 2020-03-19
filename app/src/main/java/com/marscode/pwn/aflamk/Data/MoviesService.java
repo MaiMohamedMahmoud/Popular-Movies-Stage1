@@ -2,6 +2,9 @@ package com.marscode.pwn.aflamk.Data;
 
 import com.marscode.pwn.aflamk.Models.Movies;
 import com.marscode.pwn.aflamk.Models.MoviesListResponse;
+import com.marscode.pwn.aflamk.Models.ReviewResponse;
+import com.marscode.pwn.aflamk.Models.VideoResponse;
+import com.marscode.pwn.aflamk.Models.Videos;
 
 
 import retrofit2.Call;
@@ -20,5 +23,12 @@ public interface MoviesService {
 
     @GET("movie/{movie_id}")
     Call<Movies> GetMovieDetails(@Path("movie_id") int movie_id, @Query("api_key") String apiKei);
+
+
+    @GET("movie/{movie_id}/videos")
+    Call<VideoResponse> GetTrailers(@Path("movie_id") int movie_id, @Query("api_key") String apiKei);
+
+    @GET("movie/{movie_id}/reviews")
+    Call<ReviewResponse> GetReviews(@Path("movie_id") int movie_id, @Query("api_key") String apiKei);
 
 }

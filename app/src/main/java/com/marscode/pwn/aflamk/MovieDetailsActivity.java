@@ -7,12 +7,22 @@ import android.os.Bundle;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.marscode.pwn.aflamk.Data.ApiUtils;
+import com.marscode.pwn.aflamk.Models.AppDatabase;
 import com.marscode.pwn.aflamk.Models.Movies;
+import com.marscode.pwn.aflamk.Models.MoviesListResponse;
+import com.marscode.pwn.aflamk.Models.ReviewResponse;
+import com.marscode.pwn.aflamk.Models.Reviews;
+import com.marscode.pwn.aflamk.Models.VideoResponse;
+import com.marscode.pwn.aflamk.Models.Videos;
 import com.squareup.picasso.Picasso;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -20,10 +30,13 @@ import retrofit2.Response;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.marscode.pwn.aflamk.Data.ApiUtils.API_KEY;
 import static com.marscode.pwn.aflamk.Data.ApiUtils.Base_image_URl;
@@ -38,7 +51,12 @@ public class MovieDetailsActivity extends AppCompatActivity {
     Toolbar toolbar;
     Activity activity;
     CollapsingToolbarLayout toolbarLayout;
-
+    List<Videos> video_list;
+    List<Reviews> review_list;
+    RecyclerView video_recycle_View;
+    RecyclerView review_recycle_View;
+    Context context;
+    Movies movie;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +64,9 @@ public class MovieDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_movie_details);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbarLayout = findViewById(R.id.toolbar_layout);
+        video_list = new ArrayList<>();
+        review_list = new ArrayList<>();
+        context = this;
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -55,7 +76,22 @@ public class MovieDetailsActivity extends AppCompatActivity {
         movie_rate_txt = findViewById(R.id.movie_rate_txt);
         release_date_txt = findViewById(R.id.release_date_txt);
         movie_poster_image = findViewById(R.id.movie_poster_image);
+        video_recycle_View = findViewById(R.id.video_list_recycle_view);
+        review_recycle_View = findViewById(R.id.review_list_recycle_view);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.HORIZONTAL, false);
+        video_recycle_View.setLayoutManager(linearLayoutManager);
+        LinearLayoutManager linearLayoutManagerReview = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
+        review_recycle_View.setLayoutManager(linearLayoutManagerReview);
         activity = this;
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+
+            }
+        });
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,6 +101,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         if (isOnline() && isNetworkAvailable(getApplicationContext())) {
             getMovieDetails();
+            getVideos();
+            getReviews();
         } else {
             Toast.makeText(getApplicationContext(), R.string.internet_connection, Toast.LENGTH_LONG).show();
         }
@@ -100,6 +138,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         @Override
         public void onResponse(Call<Movies> call, Response<Movies> response) {
             Movies moviesObj = response.body();
+            movie = moviesObj;
             Log.i("sucess", "Requested URL " + call.request());
             Log.i("Response Body", response.body() + "");
 
@@ -122,6 +161,46 @@ public class MovieDetailsActivity extends AppCompatActivity {
         @Override
         public void onFailure(Call<Movies> call, Throwable t) {
             Log.i("fail", "Requested URL " + call.request() + "Throwable Message " + t.getMessage());
+
+        }
+    };
+
+    private void getVideos() {
+        ApiUtils.getMovieService().GetTrailers(Movies_Id, API_KEY).enqueue(MoviesTrailers);
+    }
+
+    Callback<VideoResponse> MoviesTrailers = new Callback<VideoResponse>() {
+        @Override
+        public void onResponse(Call<VideoResponse> call, Response<VideoResponse> response) {
+            VideoResponse moviesListResponse = response.body();
+            video_list.addAll(moviesListResponse.getVideos());
+
+            video_recycle_View.setAdapter(new VideoAdapter(context, video_list));
+        }
+
+        @Override
+        public void onFailure(Call<VideoResponse> call, Throwable t) {
+            Log.i("fail", "Requested URL  " + call.request() + "Throwable Message " + t.getMessage());
+
+        }
+    };
+
+    private void getReviews() {
+        ApiUtils.getMovieService().GetReviews(Movies_Id, API_KEY).enqueue(MoviesReviews);
+    }
+
+    Callback<ReviewResponse> MoviesReviews = new Callback<ReviewResponse>() {
+        @Override
+        public void onResponse(Call<ReviewResponse> call, Response<ReviewResponse> response) {
+            ReviewResponse reviewListResponse = response.body();
+            review_list.addAll(reviewListResponse.getReviews());
+
+            review_recycle_View.setAdapter(new ReviewAdapter(context, review_list));
+        }
+
+        @Override
+        public void onFailure(Call<ReviewResponse> call, Throwable t) {
+            Log.i("fail", "Requested URL  " + call.request() + "Throwable Message " + t.getMessage());
 
         }
     };

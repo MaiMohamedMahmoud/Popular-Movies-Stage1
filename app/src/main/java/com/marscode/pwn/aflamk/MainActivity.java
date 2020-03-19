@@ -1,21 +1,28 @@
 package com.marscode.pwn.aflamk;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.marscode.pwn.aflamk.Data.ApiUtils;
+import com.marscode.pwn.aflamk.Data.MovieListner;
 import com.marscode.pwn.aflamk.Data.MoviesService;
 import com.marscode.pwn.aflamk.Models.Movies;
 import com.marscode.pwn.aflamk.Models.MoviesListResponse;
@@ -26,13 +33,14 @@ import java.util.List;
 
 import static com.marscode.pwn.aflamk.Data.ApiUtils.API_KEY;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MovieListner {
 
     private MoviesService moviesApi;
     RecyclerView movieListRecycle;
     List<Movies> moviesList;
     List<Movies> topMoviesList;
     Context context;
+    MovieListner movieListner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,18 +52,17 @@ public class MainActivity extends AppCompatActivity {
         topMoviesList = new ArrayList<>();
         movieListRecycle = findViewById(R.id.movie_list);
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
         movieListRecycle.setLayoutManager(gridLayoutManager);
-        context = getApplicationContext();
+        context = this;
 
-        if(isOnline()&& isNetworkAvailable(context)){
+        if (isOnline() && isNetworkAvailable(context)) {
             getPopularMovies(API_KEY);
             setTitle(R.string.popular);
+        } else {
+            Toast.makeText(context, R.string.internet_connection, Toast.LENGTH_LONG).show();
         }
-        else
-        {
-            Toast.makeText(context,R.string.internet_connection,Toast.LENGTH_LONG).show();
-        }
+
 
     }
 
@@ -68,11 +75,13 @@ public class MainActivity extends AppCompatActivity {
         Runtime runtime = Runtime.getRuntime();
         try {
             Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
-            int     exitValue = ipProcess.waitFor();
+            int exitValue = ipProcess.waitFor();
             return (exitValue == 0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-        catch (IOException e)          { e.printStackTrace(); }
-        catch (InterruptedException e) { e.printStackTrace(); }
 
         return false;
     }
@@ -94,7 +103,9 @@ public class MainActivity extends AppCompatActivity {
             MoviesListResponse moviesListResponse = response.body();
             Log.i("Response Body", response.body().getPage().toString() + "");
             moviesList.addAll(moviesListResponse.getResults());
-            movieListRecycle.setAdapter(new MovieAdapter(moviesList, context));
+
+
+            movieListRecycle.setAdapter(new MovieAdapter(moviesList, context, (MovieListner) new MainActivity()));
 
         }
 
@@ -125,6 +136,30 @@ public class MainActivity extends AppCompatActivity {
             setTitle(R.string.popular);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClickItem(Context context, View v, Movies movies) {
+//        ImageView imageView = v.findViewById(R.id.movie_grid_item_image);
+//        Bundle transition = ActivityOptionsCompat
+//                .makeSceneTransitionAnimation(this, imageView, getString(R.string.shared_element_transition_name))
+//                .toBundle();
+
+        Intent intent = new Intent(context, MovieDetailsActivity.class);
+        intent.putExtra("Movies_Id", movies.getId());
+        intent.addFlags(intent.FLAG_ACTIVITY_NEW_TASK);
+
+        Bundle transition = ActivityOptionsCompat
+                .makeSceneTransitionAnimation((MainActivity) context, v,context.getString(R.string.shared_element_movieImage))
+                .toBundle();
+
+        context.startActivity(intent, transition);
+
+
+//        ActivityOptionsCompat options = ActivityOptionsCompat.
+//                makeSceneTransitionAnimation(this, v, "movieImage");
+//        startActivity(intent, options.toBundle());
+
     }
 }
 
