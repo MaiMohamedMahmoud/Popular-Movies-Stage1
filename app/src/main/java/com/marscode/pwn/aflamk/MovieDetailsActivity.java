@@ -10,7 +10,6 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.marscode.pwn.aflamk.Data.ApiUtils;
-import com.marscode.pwn.aflamk.Models.AppDatabase;
 import com.marscode.pwn.aflamk.Models.Movies;
 import com.marscode.pwn.aflamk.Models.MoviesListResponse;
 import com.marscode.pwn.aflamk.Models.ReviewResponse;
@@ -57,6 +56,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     RecyclerView review_recycle_View;
     Context context;
     Movies movie;
+    private MovieViewModel mMovieViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +90,9 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
 
+                mMovieViewModel = new MovieViewModel(getApplication());
+                Log.d("sss",movie+"");
+                mMovieViewModel.insert(movie);
             }
         });
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

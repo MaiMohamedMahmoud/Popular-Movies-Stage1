@@ -11,4 +11,9 @@
         android:icon="@android:color/white"
         android:title="@string/popular"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/favourite"
+        android:icon="@android:color/white"
+        android:title="@string/popular"
+        app:showAsAction="never" />
 </menu>

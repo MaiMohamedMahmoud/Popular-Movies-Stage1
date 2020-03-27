@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements MovieListner {
     List<Movies> topMoviesList;
     Context context;
     MovieListner movieListner;
+    MovieAdapter mMovieAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,8 +105,9 @@ public class MainActivity extends AppCompatActivity implements MovieListner {
             Log.i("Response Body", response.body().getPage().toString() + "");
             moviesList.addAll(moviesListResponse.getResults());
 
-
-            movieListRecycle.setAdapter(new MovieAdapter(moviesList, context, (MovieListner) new MainActivity()));
+            mMovieAdapter = new MovieAdapter(context, (MovieListner) new MainActivity());
+            mMovieAdapter.setMoviesList(moviesList);
+            movieListRecycle.setAdapter(mMovieAdapter);
 
         }
 
@@ -135,6 +137,10 @@ public class MainActivity extends AppCompatActivity implements MovieListner {
             getPopularMovies(API_KEY);
             setTitle(R.string.popular);
         }
+        if (id == R.id.favourite) {
+            Intent intent = new Intent(context, FavouriteMovies.class);
+            startActivity(intent);
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -150,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements MovieListner {
         intent.addFlags(intent.FLAG_ACTIVITY_NEW_TASK);
 
         Bundle transition = ActivityOptionsCompat
-                .makeSceneTransitionAnimation((MainActivity) context, v,context.getString(R.string.shared_element_movieImage))
+                .makeSceneTransitionAnimation((MainActivity) context, v, context.getString(R.string.shared_element_movieImage))
                 .toBundle();
 
         context.startActivity(intent, transition);

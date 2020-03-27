@@ -5,28 +5,33 @@ import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "Movies")
+@Entity(tableName = "movies_table")
 public class Movies {
 
     @SerializedName("popularity")
     @Expose
     @ColumnInfo(name = "popularity")
+    @Nullable
     private Double popularity;
     @SerializedName("vote_count")
     @Expose
     @ColumnInfo(name = "vote_count")
+    @Nullable
     private Integer voteCount;
     @SerializedName("video")
     @Expose
     @ColumnInfo(name = "video")
+    @Nullable
     private Boolean video;
     @SerializedName("poster_path")
     @Expose
     @ColumnInfo(name = "poster_path")
+    @Nullable
     private String posterPath;
     @SerializedName("id")
     @Expose
@@ -35,18 +40,22 @@ public class Movies {
     @SerializedName("adult")
     @Expose
     @ColumnInfo(name = "adult")
+    @Nullable
     private Boolean adult;
     @SerializedName("backdrop_path")
     @Expose
     @ColumnInfo(name = "backdrop_path")
+    @Nullable
     private String backdropPath;
     @SerializedName("original_language")
     @Expose
     @ColumnInfo(name = "original_language")
+    @Nullable
     private String originalLanguage;
     @SerializedName("original_title")
     @Expose
     @ColumnInfo(name = "original_title")
+    @Nullable
     private String originalTitle;
 //    @SerializedName("genre_ids")
 //    @Expose
@@ -54,18 +63,22 @@ public class Movies {
     @SerializedName("title")
     @Expose
     @ColumnInfo(name = "title")
+    @Nullable
     private String title;
     @SerializedName("vote_average")
     @Expose
     @ColumnInfo(name = "vote_average")
+    @Nullable
     private Double voteAverage;
     @SerializedName("overview")
     @Expose
     @ColumnInfo(name = "overview")
+    @Nullable
     private String overview;
     @SerializedName("release_date")
     @Expose
     @ColumnInfo(name = "release_date")
+    @Nullable
     private String releaseDate;
 
     public Double getPopularity() {

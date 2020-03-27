@@ -29,10 +29,14 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     Context context;
     MovieListner movieListner;
 
-    MovieAdapter(List<Movies> moviesList, Context context, MovieListner movieListner) {
-        this.moviesList = moviesList;
+    MovieAdapter(Context context, MovieListner movieListner) {
         this.context = context;
         this.movieListner = movieListner;
+    }
+
+    void setMoviesList(List<Movies> movies) {
+        moviesList = movies;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -50,7 +54,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return moviesList.size();
+        if (moviesList == null) {
+            return 0;
+        } else {
+
+            return moviesList.size();
+        }
     }
 
 
@@ -73,7 +82,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    movieListner.onClickItem( context,movie_image,moviesList.get(position));
+                    movieListner.onClickItem(context, movie_image, moviesList.get(position));
                 }
             });
         }
