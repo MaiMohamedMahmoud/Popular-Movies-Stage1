@@ -26,8 +26,12 @@ public class MovieViewModel extends AndroidViewModel {
         return mMoviesList;
     }
 
-    public void deleteMovie(int id){
+    public void deleteMovie(int id) {
         mMovieReprository.deleteMovie(id);
+    }
+
+    public LiveData<Movies> isFavourite(int id) {
+        return mMovieReprository.isFavourite(id);
     }
 
     public void insert(Movies movies) {

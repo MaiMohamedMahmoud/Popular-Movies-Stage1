@@ -18,8 +18,10 @@ import com.marscode.pwn.aflamk.Models.VideoResponse;
 import com.marscode.pwn.aflamk.Models.Videos;
 import com.squareup.picasso.Picasso;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import retrofit2.Call;
@@ -57,6 +59,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     Context context;
     Movies movie;
     private MovieViewModel mMovieViewModel;
+    Boolean isFav = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,18 +86,41 @@ public class MovieDetailsActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManagerReview = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
         review_recycle_View.setLayoutManager(linearLayoutManagerReview);
         activity = this;
+        mMovieViewModel = new MovieViewModel(getApplication());
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
+        mMovieViewModel.isFavourite(Movies_Id).observe(this, movies -> {
+
+            if (movies != null) {
+                fab.setImageDrawable(getDrawable(R.drawable.ic_favorite_black_24dp));
+                isFav = true;
+            } else {
+                fab.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+                isFav = false;
+            }
+        });
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+
+                String txt;
+                if (isFav) {
+                    mMovieViewModel.deleteMovie(movie.getId());
+                    txt = "Removed from your favourite list";
+
+                } else {
+                    mMovieViewModel.insert(movie);
+                    txt="Added into your favourite list";
+
+                }
+
+                Snackbar.make(view, txt, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
 
-                mMovieViewModel = new MovieViewModel(getApplication());
-                Log.d("sss",movie+"");
-                mMovieViewModel.insert(movie);
             }
         });
+
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -167,6 +193,12 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         }
     };
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 
     private void getVideos() {
         ApiUtils.getMovieService().GetTrailers(Movies_Id, API_KEY).enqueue(MoviesTrailers);

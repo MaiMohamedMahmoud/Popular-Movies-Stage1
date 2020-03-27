@@ -12,7 +12,7 @@ import androidx.lifecycle.LiveData;
 
 public class MovieReprository {
 
-    private LiveData<List<Movies>> movieList ;
+    private LiveData<List<Movies>> movieList;
     private MovieDao mMovieDao;
 
 
@@ -32,10 +32,14 @@ public class MovieReprository {
     // You must call this on a non-UI thread or your app will throw an exception. Room ensures
     // Delete movie by Id
 
-    public void deleteMovie(int id){
+    public void deleteMovie(int id) {
         MovieDatabase.databaseWriteExecutor.execute(() -> {
             mMovieDao.deleteMovie(id);
         });
+    }
+
+    public LiveData<Movies> isFavourite(int id) {
+        return mMovieDao.isFavourite(id);
     }
 
     // You must call this on a non-UI thread or your app will throw an exception. Room ensures

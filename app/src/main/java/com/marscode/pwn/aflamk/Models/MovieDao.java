@@ -15,10 +15,11 @@ public interface MovieDao {
     LiveData<List<Movies>> getAll();
 
     @Query("SELECT * FROM movies_table where id LIKE  :id ")
-    LiveData<Movies> findById(int id);
+    LiveData<Movies> isFavourite(int id);
 
     @Query("DELETE FROM movies_table WHERE id = :id")
     void deleteMovie(int id);
+
 
     @Insert
     void insertAll(Movies... movies);
