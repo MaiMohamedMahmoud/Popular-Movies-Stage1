@@ -1,31 +1,27 @@
-package com.marscode.pwn.aflamk;
+package com.marscode.pwn.aflamk.Screens.MovieList;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityOptionsCompat;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import android.app.Activity;
-import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.marscode.pwn.aflamk.Data.ApiUtils;
-import com.marscode.pwn.aflamk.Data.MovieListner;
 import com.marscode.pwn.aflamk.Data.MoviesService;
+import com.marscode.pwn.aflamk.FavouriteMovies;
 import com.marscode.pwn.aflamk.Models.Movies;
 import com.marscode.pwn.aflamk.Models.MoviesListResponse;
+import com.marscode.pwn.aflamk.R;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,28 +29,23 @@ import java.util.List;
 
 import static com.marscode.pwn.aflamk.Data.ApiUtils.API_KEY;
 
-public class MainActivity extends AppCompatActivity implements MovieListner {
+public class MainActivity extends AppCompatActivity {
 
     private MoviesService moviesApi;
-    RecyclerView movieListRecycle;
+
     List<Movies> moviesList;
     List<Movies> topMoviesList;
     Context context;
-    MovieListner movieListner;
-    MovieAdapter mMovieAdapter;
+    MovieListViewMVP mMovieListViewMVP;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        moviesApi = ApiUtils.getMovieService();
 
+        mMovieListViewMVP = new MovieListViewMVPImp(LayoutInflater.from(this), null);
+        moviesApi = ApiUtils.getMovieService();
         moviesList = new ArrayList<>();
         topMoviesList = new ArrayList<>();
-        movieListRecycle = findViewById(R.id.movie_list);
-
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
-        movieListRecycle.setLayoutManager(gridLayoutManager);
         context = this;
 
         if (isOnline() && isNetworkAvailable(context)) {
@@ -64,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements MovieListner {
             Toast.makeText(context, R.string.internet_connection, Toast.LENGTH_LONG).show();
         }
 
+        setContentView(mMovieListViewMVP.getRootView());
 
     }
 
@@ -88,9 +80,7 @@ public class MainActivity extends AppCompatActivity implements MovieListner {
     }
 
     public void getPopularMovies(String ApiKey) {
-
         moviesApi.PopularMovies(ApiKey).enqueue(MovieResponseCallback);
-
     }
 
     public void getTopRatedMovies(String ApiKey) {
@@ -105,10 +95,7 @@ public class MainActivity extends AppCompatActivity implements MovieListner {
             Log.i("Response Body", response.body().getPage().toString() + "");
             moviesList.addAll(moviesListResponse.getResults());
 
-            mMovieAdapter = new MovieAdapter(context, (MovieListner) new MainActivity());
-            mMovieAdapter.setMoviesList(moviesList);
-            movieListRecycle.setAdapter(mMovieAdapter);
-
+            mMovieListViewMVP.bindMovieList(moviesList);
         }
 
         @Override
@@ -120,9 +107,11 @@ public class MainActivity extends AppCompatActivity implements MovieListner {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.movies_menu, menu);
+        MenuInflater inflater = getMenuInflater();
+        mMovieListViewMVP.getMenuView(inflater, menu);
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -144,28 +133,5 @@ public class MainActivity extends AppCompatActivity implements MovieListner {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onClickItem(Context context, View v, Movies movies) {
-//        ImageView imageView = v.findViewById(R.id.movie_grid_item_image);
-//        Bundle transition = ActivityOptionsCompat
-//                .makeSceneTransitionAnimation(this, imageView, getString(R.string.shared_element_transition_name))
-//                .toBundle();
-
-        Intent intent = new Intent(context, MovieDetailsActivity.class);
-        intent.putExtra("Movies_Id", movies.getId());
-        intent.addFlags(intent.FLAG_ACTIVITY_NEW_TASK);
-
-        Bundle transition = ActivityOptionsCompat
-                .makeSceneTransitionAnimation((MainActivity) context, v, context.getString(R.string.shared_element_movieImage))
-                .toBundle();
-
-        context.startActivity(intent, transition);
-
-
-//        ActivityOptionsCompat options = ActivityOptionsCompat.
-//                makeSceneTransitionAnimation(this, v, "movieImage");
-//        startActivity(intent, options.toBundle());
-
-    }
 }
 

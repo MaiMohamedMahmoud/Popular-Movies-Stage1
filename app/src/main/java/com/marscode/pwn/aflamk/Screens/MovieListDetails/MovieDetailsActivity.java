@@ -1,27 +1,25 @@
-package com.marscode.pwn.aflamk;
+package com.marscode.pwn.aflamk.Screens.MovieListDetails;
 
 import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 
-import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.marscode.pwn.aflamk.Data.ApiUtils;
 import com.marscode.pwn.aflamk.Models.Movies;
-import com.marscode.pwn.aflamk.Models.MoviesListResponse;
 import com.marscode.pwn.aflamk.Models.ReviewResponse;
 import com.marscode.pwn.aflamk.Models.Reviews;
 import com.marscode.pwn.aflamk.Models.VideoResponse;
 import com.marscode.pwn.aflamk.Models.Videos;
+import com.marscode.pwn.aflamk.MovieViewModel;
+import com.marscode.pwn.aflamk.R;
 import com.squareup.picasso.Picasso;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import retrofit2.Call;
@@ -31,7 +29,6 @@ import retrofit2.Response;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 

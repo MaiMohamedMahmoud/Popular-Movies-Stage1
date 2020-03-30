@@ -1,26 +1,18 @@
-package com.marscode.pwn.aflamk;
+package com.marscode.pwn.aflamk.Screens.MovieListDetails;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
-import android.net.Uri;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.marscode.pwn.aflamk.Models.Reviews;
-import com.marscode.pwn.aflamk.Models.Videos;
-import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
+import com.marscode.pwn.aflamk.R;
 
 import java.util.List;
-import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;

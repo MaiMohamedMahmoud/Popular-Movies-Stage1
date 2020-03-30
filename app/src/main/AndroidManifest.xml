@@ -15,16 +15,18 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity android:name=".FavouriteMovies"
-            android:launchMode="singleTask"></activity>
+            android:launchMode="singleTask"
+            >
+        </activity>
         <activity
-            android:name=".MovieDetailsActivity"
+            android:name=".Screens.MovieListDetails.MovieDetailsActivity"
             android:label="@string/title_activity_movie_details"
             android:theme="@style/AppTheme.NoActionBar"
             android:launchMode="singleTask">
             <meta-data
             android:name="android.support.PARENT_ACTIVITY"
-            android:value=".MainActivity" /></activity>
-        <activity android:name=".MainActivity">
+            android:value=".Screens.MovieList.MainActivity" /></activity>
+        <activity android:name=".Screens.MovieList.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

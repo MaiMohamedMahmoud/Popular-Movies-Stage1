@@ -11,11 +11,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import com.marscode.pwn.aflamk.Data.MovieListner;
 import com.marscode.pwn.aflamk.Models.Movies;
+import com.marscode.pwn.aflamk.Screens.MovieList.MovieAdapter;
+import com.marscode.pwn.aflamk.Screens.MovieListDetails.MovieDetailsActivity;
 
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class FavouriteMovies extends AppCompatActivity implements MovieListner {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favourite_movies);
         movieListfavouriteRecycle = findViewById(R.id.movie_favourite_list);
-        mMovieAdapter = new MovieAdapter(this, (MovieListner) new FavouriteMovies());
+        mMovieAdapter = new MovieAdapter(this);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
         movieListfavouriteRecycle.setLayoutManager(gridLayoutManager);
 
@@ -47,9 +48,6 @@ public class FavouriteMovies extends AppCompatActivity implements MovieListner {
                 mMovieAdapter.setMoviesList(movies);
             }
         });
-
-
-
     }
 
     @Override

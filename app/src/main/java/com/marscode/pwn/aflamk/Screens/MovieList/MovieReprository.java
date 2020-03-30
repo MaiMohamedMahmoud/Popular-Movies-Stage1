@@ -1,4 +1,4 @@
-package com.marscode.pwn.aflamk;
+package com.marscode.pwn.aflamk.Screens.MovieList;
 
 import android.app.Application;
 

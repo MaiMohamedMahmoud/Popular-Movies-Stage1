@@ -1,9 +1,9 @@
 package com.marscode.pwn.aflamk;
 
 import android.app.Application;
-import android.util.Log;
 
 import com.marscode.pwn.aflamk.Models.Movies;
+import com.marscode.pwn.aflamk.Screens.MovieList.MovieReprository;
 
 import java.util.List;
 

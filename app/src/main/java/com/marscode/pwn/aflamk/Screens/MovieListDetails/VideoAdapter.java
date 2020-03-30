@@ -1,20 +1,16 @@
-package com.marscode.pwn.aflamk;
+package com.marscode.pwn.aflamk.Screens.MovieListDetails;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.media.Image;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.marscode.pwn.aflamk.Models.Movies;
 import com.marscode.pwn.aflamk.Models.Videos;
+import com.marscode.pwn.aflamk.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -22,9 +18,6 @@ import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import static com.marscode.pwn.aflamk.Data.ApiUtils.Base_image_URl;
-import static com.marscode.pwn.aflamk.Data.ApiUtils.image_size;
 
 public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> {
 

@@ -6,6 +6,6 @@ import android.view.View;
 import com.marscode.pwn.aflamk.Models.Movies;
 
 public interface MovieListner {
-    void onClickItem(Context context,View view, Movies movie);
+   public void onClickItem(Context context,View view, Movies movie);
 
 }
