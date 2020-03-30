@@ -5,9 +5,11 @@ Popular Movie App use the Api  [themoviedb](https://developers.themoviedb.org/3/
 
 
 # Library Used
-Retrofit com.squareup.retrofit2:retrofit:2.1.0
-Room    androidx.room:room-runtime:$room_version
-Picasso   com.squareup.picasso:picasso:2.5.1
+- [Retrofit 2](https://square.github.io/retrofit/2.x/retrofit/)
+
+- [Picasso](https://square.github.io/picasso/)  
+
+- Room Library 
 
 
 
