@@ -6,4 +6,3 @@ android:
     - android-28
 script:
   ./gradlew test
-  ./gradlew connectedAndroidTest
