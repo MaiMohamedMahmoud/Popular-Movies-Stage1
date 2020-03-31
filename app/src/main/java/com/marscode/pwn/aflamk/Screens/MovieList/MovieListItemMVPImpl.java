@@ -27,10 +27,13 @@ public class MovieListItemMVPImpl extends BaseViewMVP implements MovieListViewIt
 
     public MovieListItemMVPImpl(LayoutInflater inflater, ViewGroup parent) {
         setRootView(inflater.inflate(R.layout.movie_list_item, parent, false));
-        movie_image = findViewById(R.id.movie_image);
+
 
     }
 
+    public void getview(View view){
+        movie_image = view.findViewById(R.id.movie_image);
+    }
     private Context getContext() {
         return getRootView().getContext();
     }

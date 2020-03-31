@@ -7,6 +7,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.marscode.pwn.aflamk.Data.MovieListner;
 import com.marscode.pwn.aflamk.Models.Movies;
 import com.marscode.pwn.aflamk.R;
 import com.marscode.pwn.aflamk.Screens.common.BaseViewMVP;
@@ -25,11 +26,11 @@ public class MovieListViewMVPImp extends BaseViewMVP implements MovieListViewMVP
     View rootview;
     private final List<Listener> mListeners = new ArrayList<>();
 
-    public MovieListViewMVPImp(LayoutInflater inflater, ViewGroup group) {
+    public MovieListViewMVPImp(LayoutInflater inflater, ViewGroup group, MovieListner movieListner) {
         setRootView(inflater.inflate(R.layout.activity_main, group, false));
 
         movieListRecycle = findViewById(R.id.movie_list);
-        mMovieAdapter = new MovieAdapter(getContext());
+        mMovieAdapter = new MovieAdapter(getContext(),movieListner);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
         movieListRecycle.setLayoutManager(gridLayoutManager);
 

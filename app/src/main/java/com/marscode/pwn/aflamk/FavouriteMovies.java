@@ -33,7 +33,7 @@ public class FavouriteMovies extends AppCompatActivity implements MovieListner {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favourite_movies);
         movieListfavouriteRecycle = findViewById(R.id.movie_favourite_list);
-        mMovieAdapter = new MovieAdapter(this);
+        mMovieAdapter = new MovieAdapter(this,(MovieListner) new FavouriteMovies());
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
         movieListfavouriteRecycle.setLayoutManager(gridLayoutManager);
 

@@ -1,6 +1,7 @@
 package com.marscode.pwn.aflamk.Screens.MovieList;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityOptionsCompat;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -14,14 +15,17 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.marscode.pwn.aflamk.Data.ApiUtils;
+import com.marscode.pwn.aflamk.Data.MovieListner;
 import com.marscode.pwn.aflamk.Data.MoviesService;
 import com.marscode.pwn.aflamk.FavouriteMovies;
 import com.marscode.pwn.aflamk.Models.Movies;
 import com.marscode.pwn.aflamk.Models.MoviesListResponse;
 import com.marscode.pwn.aflamk.R;
+import com.marscode.pwn.aflamk.Screens.MovieListDetails.MovieDetailsActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,7 +33,7 @@ import java.util.List;
 
 import static com.marscode.pwn.aflamk.Data.ApiUtils.API_KEY;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MovieListner {
 
     private MoviesService moviesApi;
 
@@ -37,12 +41,13 @@ public class MainActivity extends AppCompatActivity {
     List<Movies> topMoviesList;
     Context context;
     MovieListViewMVP mMovieListViewMVP;
+    MovieListner movieListner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mMovieListViewMVP = new MovieListViewMVPImp(LayoutInflater.from(this), null);
+        mMovieListViewMVP = new MovieListViewMVPImp(LayoutInflater.from(this), null,(MovieListner) new MainActivity() );
         moviesApi = ApiUtils.getMovieService();
         moviesList = new ArrayList<>();
         topMoviesList = new ArrayList<>();
@@ -132,6 +137,24 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+
+    @Override
+    public void onClickItem(Context context, View v, Movies movies) {
+
+        Intent intent = new Intent(context, MovieDetailsActivity.class);
+        intent.putExtra("Movies_Id", movies.getId());
+        intent.addFlags(intent.FLAG_ACTIVITY_NEW_TASK);
+
+        Bundle transition = ActivityOptionsCompat
+                .makeSceneTransitionAnimation((MainActivity) context, v, context.getString(R.string.shared_element_movieImage))
+                .toBundle();
+
+        context.startActivity(intent, transition);
+
+    }
+
 
 }
 
